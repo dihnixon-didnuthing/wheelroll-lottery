@@ -5,6 +5,7 @@
     <script src="jquery.backgroundPosition.js"> </script>
     <script src="jquery.color.js"> </script>
     <script src="jquery.pulse.js"> </script>
+    <script src="jquery-ui.js"> </script>
     <script src="./xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link href="roll.css" media="screen" rel="stylesheet" type="text/css" />
@@ -52,13 +53,10 @@
 
       <div class="bottom_div">
         <p>
-          <input type="button" class="btn" value="Ghép Session" onclick="mergeWinners()"/>
-        </p>
-        <p>
           <input type="button" class="btn" value="Dừng nhanh" onclick="quickstop()"/>
         </p>
         <p>
-          <input type="button" class="btn" value="Quay" onclick="spinprize()"/>
+          <input type="button" class="btn" value="Quay" onclick="spinprize(),requestfullscreen()"/>
         </p>
         <p>
           <input type="button" class="btn" value="Xuất DS" onclick="exportwinners()"/>

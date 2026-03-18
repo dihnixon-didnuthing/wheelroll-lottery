@@ -19,7 +19,7 @@ var IS_SPINNING = false;
 var WINNER = [];
 var STORAGE_KEY = 'roll_winners';
 var IS_IDLE = false;
-var CONFETTI_INTERVAL = [];
+var CONFETTI_TIMEOUT = [];
 var BASE_HEADER_FONTSIZE = null;
 var BASE_PRIZE_FONTSIZE = null;
 var IS_FULLSCREEN = null;
@@ -29,6 +29,11 @@ var IS_FINISHED = true;
 var ribbonShape = confetti.shapeFromPath({
   path: 'M0 0 L4 0 L4 20 L0 20 Z',
   matrix: [1, 0, 0, 1, -2, -10]
+});
+
+var mShape = confetti.shapeFromPath({
+  path: 'm -86.902848,115.22298 h 22.446994 l -37.554806,-85.495445 -18.85546,8.728592 13.11684,29.766737 -6.08996,13.83892 -23.50104,-53.714412 -19.05066,8.318275 15.30299,34.317541 -0.0781,0.149206 c -9.44728,21.672269 -21.00261,27.603238 -22.13471,28.013555 -2.69364,1.044451 -5.58247,1.641281 -8.62745,1.641281 -0.93693,0 -1.83481,-0.0373 -2.73268,-0.14921 l -9.21304,18.87465 c 3.04499,1.67858 6.48035,2.64842 10.11091,2.64842 4.60652,0 8.82265,-1.52937 12.33609,-4.06588 l -0.0391,0.0746 c 0,0 8.70553,-4.21509 18.03567,-27.304824 0,-0.0373 3.43537,-7.385732 5.27018,-12.085744 l 0.19519,-0.522223 16.39605,37.003261 h 22.407962 l -11.555302,-26.036569 6.12899,-13.83892 z',
+   matrix: [0.09,0,0,0.09,11.34,-10.08]
 });
 
 function reanimate(slot) {
@@ -87,84 +92,85 @@ function stopidle() {
 function launchConfetti() {
   stopConfetti();
 
-  var duration = 5 * 1000;
-  var animEnd  = Date.now() + duration;
-  var colors   = ['#fdc600', '#f7b93c', '#ffffffd2', '#c01212', '#44efff'];
+  var colors = ['#F5DB79', '#f7b93c', '#44aaff'];
 
-  CONFETTI_INTERVAL = setInterval(function () {
-    var timeLeft = animEnd - Date.now();
-    if (timeLeft <= 0) {
-      stopConfetti();
-      return;
-    }
+  var shared = {
+    spread        : 55,
+    startVelocity : 24,
+    decay         : 0.94,
+    gravity       : 0.5,
+    ticks         : 400,      // long enough for everything to drift off naturally
+    colors        : colors,
+    zIndex        : 9999
+  };
 
-    var particleCount = 60 * (timeLeft / duration);
-    var shared = {
-      particleCount : Math.floor(particleCount),
-      spread        : 55,
-      startVelocity : 45,
-      decay         : 0.94,       // slightly slower fade (default is 0.9)
-      gravity       : 0.8,
-      ticks         : 280,        // longer lifetime before disappearing
-      colors        : colors,
-      zIndex        : 9999
-    };
+  var ribbonShared = Object.assign({}, shared, {
+    scalar : 1.2,
+    shapes : [ribbonShape],
+    colors : ['#F5DB79', '#f7b93c'] 
+  });
 
-    // ── Left burst (fires right) ──────────────────────────────
-    confetti(Object.assign({}, shared, {
-      angle  : 60,                // aimed toward upper-right
-      origin : { x: 0.5, y: 0.55 }
-    }));
+  var mShared = Object.assign({}, shared, {
+  scalar : 2.8,         
+  shapes : [mShape],
+  colors : ['#000000', '#ffffff'],
+  gravity: 0.43
+  });
 
-    // ── Right burst (fires left) ──────────────────────────────
-    confetti(Object.assign({}, shared, {
-      angle  : 120,               // aimed toward upper-left
-      origin : { x: 0.5, y: 0.55 }
-    }));
+  // Four bursts, staggered 400 ms apart
+  var delays = [0, 600];
 
-    // ── Star shapes (smaller burst, both sides) ───────────────
-    var starShared = Object.assign({}, shared, {
-      particleCount : Math.floor(particleCount * 0.35),
-      scalar        : 1.1,        // slightly larger stars
-      shapes        : ['star'],
-      colors        : ['#F5DB79', '#f7b93c', '#ffffff']
-    });
-    var ribbonShared = Object.assign({}, shared, {
-      particleCount : Math.floor(particleCount * 0.45),
-      scalar        : 1.2,
-      shapes        : [ribbonShape],
-      colors        : ['#F5DB79', '#f7b93c', '#ffffff', '#ff4444', '#44aaff']
-    });
+  delays.forEach(function (delay) {
+    var t = setTimeout(function () {
 
-    confetti(Object.assign({}, starShared, {
-      angle  : 60,
-      origin : { x: 0.5, y: 0.55 }
-    }));
+      // Confetti left + right
+      confetti(Object.assign({}, shared, {
+        particleCount : 80,
+        angle         : 60,
+        origin        : { x: 0.5, y: 0.55 }
+      }));
+      confetti(Object.assign({}, shared, {
+        particleCount : 40,
+        angle         : 120,
+        origin        : { x: 0.5, y: 0.55 }
+      }));
 
-    confetti(Object.assign({}, starShared, {
-      angle  : 120,
-      origin : { x: 0.5, y: 0.55 }
-    }));
+      confetti(Object.assign({}, mShared, {
+      particleCount : 10,
+      angle         : 60,
+      origin        : { x: 0.5, y: 0.55 }
+      }));
 
-    confetti(Object.assign({}, ribbonShared, {
-      angle  : 60,
-      origin : { x: 0.5, y: 0.55 }
-    }));
+      confetti(Object.assign({}, mShared, {
+      particleCount : 10,
+      angle         : 120,
+      origin        : { x: 0.5, y: 0.55 }
+      }));
 
-    confetti(Object.assign({}, ribbonShared, {
-      angle  : 120,
-      origin : { x: 0.5, y: 0.55 }
-    }));
+      // Ribbons left + right
+      confetti(Object.assign({}, ribbonShared, {
+        particleCount : 20,
+        angle         : 60,
+        origin        : { x: 0.5, y: 0.55 }
+      }));
+      confetti(Object.assign({}, ribbonShared, {
+        particleCount : 20,
+        angle         : 120,
+        origin        : { x: 0.5, y: 0.55 }
+      }));
 
-  }, 250);
+    }, delay);
 
-  CONFETTI_TIMEOUT = setTimeout(stopConfetti, duration + 300);
+    CONFETTI_TIMEOUT.push(t);
+  });
 }
 
 function stopConfetti() {
-  if (CONFETTI_INTERVAL) { clearInterval(CONFETTI_INTERVAL); CONFETTI_INTERVAL = null; }
-  if (CONFETTI_TIMEOUT)  { clearTimeout(CONFETTI_TIMEOUT);   CONFETTI_TIMEOUT  = null; }
-  confetti.reset(); // clears all canvas particles immediately
+  if (CONFETTI_TIMEOUT) {
+    CONFETTI_TIMEOUT.forEach(function (t) { clearTimeout(t); });
+  }
+  CONFETTI_TIMEOUT = [];
+  confetti.reset();
 }
 
 function doit() {
@@ -217,6 +223,7 @@ function dostop(slot) {
     );
   }
   else {
+  //Quick stop
     $(sel).css({backgroundPosition: "0px 0px"});
     $(sel).animate(
       { backgroundPosition: "(0px " + offset + ")" }, 
@@ -285,8 +292,7 @@ function moveToNextPrize() {
     SPIN_LEFT = PRIZES[PRIZE_INDEX].qty;
     updateprizeTitle();
   } else {
-    PRIZE_INDEX = 0;
-    SPIN_LEFT = PRIZES[PRIZE_INDEX].qty;
+    PRIZE_INDEX = -1;
     updateprizeTitle();
     console.log("No more prizes.");
   }
@@ -294,27 +300,32 @@ function moveToNextPrize() {
 
 function updateprizeTitle() {
   var el = document.querySelector("#prize_title");
-  console.log("qty prize: ", PRIZES[PRIZE_INDEX].qty);
   if (PRIZE_INDEX >= 0 && PRIZE_INDEX < PRIZES.length) {
     el.innerText = 'Giải: ' + PRIZES[PRIZE_INDEX].tenGiai + ' - ' + ' Còn ' + SPIN_LEFT + ' lượt';
   } else {
     el.innerText = "Hết giải!";
+    exportwinners();
   }
 }
 
 function spinprize() {
   if (PRIZES.length === 0 || PRIZE_INDEX < 0 || PRIZE_INDEX >= PRIZES.length) {
-    alert("Không có giải nào để quay.");
+    handleprizeFile();
+    handleFile();
     return;
   }
- 
+  if (IS_IDLE) stopidle();
   if (SPIN_LEFT <= 0) {
     moveToNextPrize();
     return;
   }
-  stopConfetti()
+  if (!IS_SPINNING) {
+  stopConfetti();
   choosenew();
-  doit();
+  setTimeout(doit(),1500);
+  IS_SPINNING=true;
+  }
+  return;
 }
 
 function clearPrizeDropdown() {
@@ -372,7 +383,6 @@ function choosenew() {
   $('#numbers3').hide();
 }
 
-//FILE HANDLING
 function handleFile(e) {
   console.log("handleFile");
   WINNER = [];
@@ -421,7 +431,6 @@ function handleWorkbook(workbook) {
     console.log("First entry Mã NV:", DATA.Sheet1[0]["Mã NV"]);
   }
   
-  stopidle();
   runevent();
 }
  
@@ -521,21 +530,11 @@ function loadWinners() {
 }
 
 function mergeWinners() {
-  if (PRIZES.length === 0) {
-    alert("Hãy tải danh sách giải thưởng trước khi gộp phiên.");
-    return;
-  }
- 
   var stored;
   try {
     stored = localStorage.getItem(STORAGE_KEY);
   } catch (e) {
     console.warn("Could not read localStorage:", e);
-    return;
-  }
- 
-  if (!stored) {
-    alert("Không có dữ liệu phiên trước để gộp.");
     return;
   }
  
@@ -545,11 +544,6 @@ function mergeWinners() {
   } catch (e) {
     alert("Dữ liệu phiên trước bị lỗi, không thể gộp.");
     localStorage.removeItem(STORAGE_KEY);
-    return;
-  }
- 
-  if (!Array.isArray(parsed) || parsed.length === 0) {
-    alert("Không có người thắng trong phiên trước.");
     return;
   }
  
@@ -590,6 +584,7 @@ function mergeWinners() {
   } else {
     PRIZE_INDEX = -1;
     SPIN_LEFT   = 0;
+    updateprizeTitle();
   }
  
   updateprizeTitle();
@@ -607,7 +602,7 @@ function mergeWinners() {
 
 function exportwinners() {
     if (!WINNER || WINNER.length === 0) {
-        alert("No winners to export");
+        alert("Không có người trúng giải để xuất");
         return;
     }
 
@@ -645,6 +640,7 @@ function runevent() {
   $('#numbers3').hide();
   $('#prizeselect').show();
   $('#showtime').show();
+  mergeWinners();
 }
  
 function loadbackground(num) {
@@ -662,8 +658,8 @@ document.querySelector("#file2").addEventListener('change', handleprizeFile, fal
 document.addEventListener('keydown', function (e) {
   if (e.code === 'Space' || e.code === 'Enter') {
     e.preventDefault();
+    requestfullscreen();
     if (!IS_SPINNING) {
-      IS_SPINNING=true;
       console.log("not spinning now spin");
       spinprize();
     } else {
@@ -706,6 +702,20 @@ window.addEventListener('resize', () => {
     }
 });
 
+function requestfullscreen() {
+  var elem = document.documentElement; 
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.mozRequestFullScreen) { /* Firefox */
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+    elem = window.top.document.body; //To break out of frame in IE
+    elem.msRequestFullscreen();
+  }
+}
+
 function handleFullscreenChange() {
   //fullscreenElement is not a boolean. It will be null or not null based on the fsn status of the 
   //browser. !() checks the value of var if null false not null true. Second ! negates that. 
@@ -714,7 +724,7 @@ function handleFullscreenChange() {
   var clearEl      = document.getElementById('clr');
   var numberEl     = document.querySelector('#numbers2');
   var nameEl       = document.querySelector('#numbers3');
-
+  
   if (IS_FULLSCREEN) {
     // Snapshot the current computed sizes the first time we go fullscreen
     if (BASE_HEADER_FONTSIZE === null) {
@@ -723,7 +733,7 @@ function handleFullscreenChange() {
     }
 
     // Apply +40% — override the vw-based inline styles with fixed px values
-    headerEl.style.fontSize     = (BASE_HEADER_FONTSIZE  * 1.4) + 'px';
+    headerEl.style.fontSize     = (BASE_HEADER_FONTSIZE  * 1.15) + 'px';
     prizeTitleEl.style.fontSize = (BASE_PRIZE_FONTSIZE   * 1.2) + 'px';
 
     // Show the clear div
