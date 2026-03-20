@@ -1,0 +1,407 @@
+@font-face {
+  font-family: 'JuniBold';
+  src: url('./fonts/junicode-smexpsmbold.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'JuniRegular';
+  src: url('./fonts/junicode-bolditalic.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ── Body ── */
+body {
+  background: #ffffff url("./sample_data/backdrop/0.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: white;
+  overflow: hidden;
+  transition: margin-right 0.4s ease-out;
+}
+
+body.shifted {
+  margin-right: 300px;
+}
+
+/* ── Side Notch ── */
+#side_notch {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #f7b93c;
+  color: #980000;
+  width: 20px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 6px 0 0 6px;
+  z-index: 1000;
+  transition: right 0.4s ease-out;
+}
+
+#side_notch.open {
+  right: 300px;
+}
+
+/* ── Side Panel ── */
+#side_panel {
+  position: fixed;
+  right: -300px;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  background: #1a1a1a;
+  z-index: 999;
+  transition: right 0.4s ease-out;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#side_panel.open {
+  right: 0;
+}
+
+/* ── Panel Tabs ── */
+#panel_tabs {
+  display: flex;
+  border-bottom: 2px solid #333;
+  margin-bottom: 12px;
+}
+
+.panel_tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.panel_tab.active {
+  color: #f7b93c;
+  border-bottom: 2px solid #f7b93c;
+  margin-bottom: -2px;
+}
+
+.tab_badge {
+  background: #555;
+  color: white;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+.panel_content {
+  display: none;
+  overflow-y: hidden;
+  max-height: calc(100vh - 80px);
+}
+
+.panel_content:hover {
+  overflow-y: auto;
+}
+
+
+.panel_content.active {
+  display: block;
+}
+
+/* ── Panel Tables ── */
+#winners_table,
+#prizes_table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  color: #eee;
+}
+
+#winners_table tbody,
+#prizes_table tbody {
+  display: block;
+  max-height: calc(10 * 80px);
+}
+
+#winners_table th,
+#prizes_table th {
+  position: sticky;
+  top: 0;
+  background: #1a1a1a;
+  z-index: 1;
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid #444;
+  color: #f7b93c;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+#winners_table thead,
+#winners_table tbody tr,
+#prizes_table thead,
+#prizes_table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+#winners_table td,
+#prizes_table td {
+  padding: 5px 8px;
+  font-size: 15px;
+  border-bottom: 2px, whitesmoke ;
+  border-bottom: 1px solid #2a2a2a;
+  box-sizing: border-box;
+}
+
+#winners_table td {
+  height: 60px;
+}
+
+#prizes_table td{
+  height: 40px;
+}
+
+#winners_table tr:hover td,
+#prizes_table tr:hover td {
+  background: #2a2a2a;
+}
+
+/* ── Header ── */
+#header h1 {
+  font-family: JuniBold, sans-serif;
+  text-align: center;
+  padding-top: 3vw;
+  color: #F5DB79;
+  font-size: 5.5vw;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: white;
+  line-height: 1em;
+  text-shadow:
+    0px 0px 0 rgb(206,179,82),
+    1px 1px 0 rgb(177,150,53),
+    2px 2px 0 rgb(148,121,24),
+    3px 3px 0 rgb(119,92,-5),
+    4px 4px 3px rgba(0,0,0,0.55),
+    4px 4px 1px rgba(0,0,0,0.5),
+    0px 0px 3px rgba(0,0,0,.2);
+}
+
+#prize_title {
+  font-family: JuniRegular, sans-serif;
+  text-align: center;
+  color: #F5DB79;
+  max-width: 70%;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 4.25vw;
+}
+
+/* ── Showtime ── */
+#showtime {
+  display: hidden;
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  margin: 0 auto;
+  transition: width 0.4s ease-out, right 0.4s ease-out;
+}
+
+body.shifted #showtime {
+  width: calc(100% - 300px) !important;
+}
+
+/* ── Numbers ── */
+#numbers2 {
+  position: relative;
+  z-index: 20;
+  height: 100px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  display: table;
+  background: #F5DB79;
+  padding: 2px;
+  border-radius: 5px;
+  top: 50px;
+}
+
+#numbers {
+  position: relative;
+  height: 100px;
+  margin: 0 auto;
+  display: table;
+  background: #f7b93c;
+  padding-right: 10px;
+  border-radius: 5px;
+}
+
+.num {
+  width: 100px;
+  height: 100px;
+  border: 0px solid transparent;
+  float: left;
+  background: transparent url(./slot4.png) 0 0px repeat-y;
+  background-size: cover;
+  margin: 5px auto 10px 10px;
+}
+
+/* ── Report ── */
+.report_parent {
+  position: relative;
+  z-index: 19;
+  height: 0px;
+  margin: 0 auto;
+  display: table;
+  background: #F5DB79;
+  padding: 2px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  top: 53px;
+}
+
+.report {
+  position: relative;
+  z-index: 19;
+  height: 0px;
+  margin: 0 auto;
+  display: table;
+  background: #f7b93c;
+  padding: 10px 20px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  color: #980000;
+  font-weight: bold;
+  font-size: 30px !important;
+  text-align: center;
+  font-family: Arial;
+}
+
+/* ── Prizes ── */
+#prizes {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+#prizes .winner {
+  border: 3px solid black;
+  height: 1em;
+  text-align: center;
+}
+
+#prizes .amount {
+  font-weight: bold;
+  text-align: right;
+}
+
+.prize {
+  cursor: pointer;
+  font-size: 5em;
+}
+
+/* ── Buttons ── */
+.btn {
+  width: 102px;
+  border: 1px solid black;
+  float: left;
+  margin-right: 1.45em;
+}
+
+.btn2 {
+  width: 102px;
+  border: 1px solid black;
+  float: left;
+  margin: 0 auto;
+}
+
+.bottom_div {
+  position: fixed;
+  bottom: 5;
+  left: 0;
+  opacity: 0.2;
+}
+
+.bottom_div:hover {
+  opacity: 1;
+  transition-duration: 250ms;
+}
+
+/* ── Inputs ── */
+input, textarea {
+  color: black;
+}
+
+input::placeholder, textarea::placeholder {
+  color: gray;
+}
+
+/* ── Misc ── */
+#configtime {
+  width: fit-content;
+}
+
+.prizepick {
+  opacity: 0.2;
+  display: none;
+}
+
+.prizepick:hover {
+  opacity: 1;
+  transition-duration: 250ms;
+}
+
+.debuginfo {
+  display: none;
+}
+
+.selecthide {
+  color: white;
+}
+
+.clear {
+  clear: both;
+}
+
+.d {
+  display: inline;
+}
+
+#prizeinfo {
+  font-size: 10em;
+  display: inline;
+}
+
+#header h1,
+#prize_title,
+#numbers2,
+#numbers3 {
+  transition: transform .5s;
+}
+
+.zoomin {
+  transform: scale(1.10);
+}
+
+/* ── Animations ── */
+.blink {
+  animation: blinkingText 1s 1s;
+}
+
+.flash {
+  animation: flashWhite 0.3s ease-in-out 4;
+}
+
+@keyframes flashWhite {
+  0%, 100% { background-color: original; }
+  50%       { background-color: #ffffff; }
+}
