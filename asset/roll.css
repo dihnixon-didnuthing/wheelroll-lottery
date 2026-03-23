@@ -43,7 +43,7 @@ body.shifted {
   cursor: pointer;
   border-radius: 6px 0 0 6px;
   z-index: 1000;
-  transition: right 0.4s ease-out;
+  transition: right 0.67s ease-out;
 }
 
 #side_notch.open {
@@ -59,7 +59,7 @@ body.shifted {
   height: 100%;
   background: #1a1a1a;
   z-index: 999;
-  transition: right 0.4s ease-out;
+  transition: right 0.67s ease-out;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -167,6 +167,14 @@ body.shifted {
   height: 60px;
 }
 
+#winners_footer {
+  padding: 8px 10px;
+  border-top: 1px solid #333;
+  color: #aaa;
+  font-size: 11px;
+  text-align: right;
+}
+
 #prizes_table td{
   height: 40px;
 }
@@ -207,6 +215,17 @@ body.shifted {
   font-size: 4.25vw;
 }
 
+#header, #prize_title {
+  transition: transform 670ms ease-out, font-size 670ms ease-out;
+}
+
+#header h1.shifted{
+  font-size: 4.4vw;
+}
+#prize_title.shifted{
+  font-size: 3.4vw;
+}
+
 /* ── Showtime ── */
 #showtime {
   display: hidden;
@@ -219,7 +238,11 @@ body.shifted {
 
 body.shifted #showtime {
   width: calc(100% - 300px) !important;
+  transform: scale(0.95);
+  transition: transform 0.4s ease-out, width 0.4s ease-out;
 }
+
+
 
 /* ── Numbers ── */
 #numbers2 {
@@ -245,6 +268,7 @@ body.shifted #showtime {
   border-radius: 5px;
 }
 
+
 .num {
   width: 100px;
   height: 100px;
@@ -254,6 +278,7 @@ body.shifted #showtime {
   background-size: cover;
   margin: 5px auto 10px 10px;
 }
+
 
 /* ── Report ── */
 .report_parent {
