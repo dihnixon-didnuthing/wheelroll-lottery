@@ -1,0 +1,34 @@
+# Tools Slot Machine
+
+## Tech Stack
+
+- **Language**: Python 3.8+
+- **Framework**: Flask / FastAPI
+- **Database**: SQLite / PostgreSQL
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Testing**: pytest, unittest
+- **Deployment**: Docker, AWS/Azure
+
+## User Guide
+
+### Installation
+1. Clone the repository
+2. Install dependencies: `pip install -r requirements.txt`
+3. Run the application: `python app.py`
+4. Access at `http://localhost:5000`
+
+### Features
+- Spin the slot machine wheel
+- View win/loss history
+- Check balance and statistics
+- Adjust bet amounts
+
+### Getting Started
+1. Create an account or log in
+2. Set your bet amount
+3. Click "Spin" to play
+4. View results and check your balance
+
+## Developer Guide
+
+### Project Structure

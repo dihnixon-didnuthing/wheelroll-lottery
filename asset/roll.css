@@ -20,11 +20,13 @@ body {
   background-position: center center;
   color: white;
   overflow: hidden;
-  transition: margin-right 0.4s ease-out;
+  background-position: center center;
+  transition: margin-right 0.4s ease-out, background-position 0.4s ease-out;
 }
 
 body.shifted {
   margin-right: 300px;
+  background-position: calc(50% - 150px) center;
 }
 
 /* ── Side Notch ── */
@@ -43,7 +45,7 @@ body.shifted {
   cursor: pointer;
   border-radius: 6px 0 0 6px;
   z-index: 1000;
-  transition: right 0.67s ease-out;
+  transition: right 0.4s ease-out;
 }
 
 #side_notch.open {
@@ -59,7 +61,7 @@ body.shifted {
   height: 100%;
   background: #1a1a1a;
   z-index: 999;
-  transition: right 0.67s ease-out;
+  transition: right 0.4s ease-out;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -215,8 +217,8 @@ body.shifted {
   font-size: 4.25vw;
 }
 
-#header, #prize_title {
-  transition: transform 670ms ease-out, font-size 670ms ease-out;
+#header h1, #prize_title {
+  transition: transform 400ms ease-in-out, font-size 400ms ease-in-out;
 }
 
 #header h1.shifted{
@@ -406,11 +408,9 @@ input::placeholder, textarea::placeholder {
   display: inline;
 }
 
-#header h1,
-#prize_title,
 #numbers2,
 #numbers3 {
-  transition: transform .5s;
+  transition: transform .5s ease-out;
 }
 
 .zoomin {
