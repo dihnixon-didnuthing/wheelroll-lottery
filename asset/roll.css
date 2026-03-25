@@ -113,6 +113,15 @@ body.shifted {
   overflow-y: auto;
 }
 
+.panel_content::-webkit-scrollbar {
+  display: none;
+}
+
+.panel_content {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 
 .panel_content.active {
   display: block;
@@ -237,6 +246,8 @@ body.shifted #main_layout {
   flex-direction: column;
   align-items: center;
   min-width: 0;
+  border-left: 3px solid rgba(252, 252, 124, 0.945);
+  border-right: 3px solid rgba(252, 252, 124, 0.945);
 }
 
 /* ── Header ── */
