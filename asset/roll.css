@@ -253,6 +253,7 @@ body.shifted #main_layout {
 /* ── Header ── */
 #header {
   padding-top: 1.5vw;
+  transition: padding-top 400ms ease-in-out;
 }
 
 #header h1 {
