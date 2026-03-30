@@ -24,6 +24,9 @@
   </div>
 
   <div class="panel_content active" id="tab_winners">
+    <div id="name_input_box">
+    <textarea id="name_input" placeholder="Nhập tên, Enter để xuống dòng..."></textarea>
+    </div>
     <table id="winners_table">
       <thead>
         <tr>
@@ -36,6 +39,7 @@
     </table>
     <div id="winners_footer">
       Total: <span id="total_employees">0</span> &nbsp;|&nbsp; Eligible: <span id="total_eligible">0</span>
+      &nbsp;|&nbsp; <button id="repick_toggle" onclick="toggleRepick()">Repick: OFF</button>
     </div>
   </div>
 
