@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprite Sheet · Digits 0–9</title>
+    <style>
+        *{box-sizing:border-box;}
+        :root{
+            --color-background-primary:#0f0f14;
+            --color-background-secondary:#1c1c24;
+            --color-background-info:#2a3b5c;
+            --color-border-tertiary:#3a3a44;
+            --color-border-secondary:#2c2c34;
+            --color-border-info:#5f8ab6;
+            --color-text-primary:#ededee;
+            --color-text-secondary:#bcbcc4;
+            --color-text-tertiary:#8f8f9a;
+            --color-text-info:#bdd4ff;
+            --font-mono:'SF Mono','Fira Code',monospace;
+            --border-radius-md:12px;
+        }
+        body{
+            background:radial-gradient(circle at 10% 20%,#0a0a10,#030307);
+            font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+            margin:0;
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:2rem 1.5rem;
+        }
+        .glass-panel{
+            max-width:1320px;
+            width:100%;
+            background:rgba(18,18,26,0.7);
+            backdrop-filter:blur(2px);
+            border-radius:2rem;
+            padding:1.5rem 2rem;
+            box-shadow:0 20px 35px -12px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05);
+            border:0.5px solid rgba(255,255,255,0.08);
+        }
+        .panel{display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start}
+        .controls{min-width:270px;flex:1.2;display:flex;flex-direction:column;gap:18px}
+        .preview-wrap{flex:0.8;display:flex;flex-direction:column;align-items:center;gap:12px;background:rgba(0,0,0,0.25);border-radius:28px;padding:20px 18px;backdrop-filter:blur(4px)}
+        .ctrl-group{background:rgba(28,28,36,0.8);backdrop-filter:blur(4px);border-radius:20px;padding:14px 18px;border:0.5px solid rgba(255,255,255,0.06)}
+        .lbl{font-size:12px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase;color:#b9c7dd;margin-bottom:8px}
+        .ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;color:var(--color-text-secondary);margin-bottom:8px}
+        .ctrl-row input[type=color]{width:38px;height:30px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);padding:2px;cursor:pointer;background:transparent}
+        .ctrl-row input[type=range]{flex:1}
+        .ctrl-row span{min-width:32px;text-align:right;font-size:13px;font-weight:500;color:var(--color-text-primary)}
+        .swatch-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+        .swatch{width:24px;height:24px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:transform 0.1s}
+        .swatch:hover{transform:scale(1.12)}
+        .dl-row{display:flex;gap:12px;margin-top:6px}
+        .dl-btn{flex:1;padding:10px 0;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:13px;cursor:pointer;text-align:center;font-weight:500}
+        .dl-btn.png{border-color:var(--color-border-info);color:var(--color-text-info)}
+        .dl-btn.png:hover{background:rgba(95,138,182,0.2)}
+        .font-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px}
+        .font-btn{padding:7px 8px;border-radius:10px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);cursor:pointer;font-size:14px;text-align:center;color:var(--color-text-primary)}
+        .font-btn.active{border-color:var(--color-border-info);background:var(--color-background-info);color:var(--color-text-info)}
+        .sprite-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+        .sprite-index-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);cursor:pointer;font-size:14px;font-weight:500}
+        .sprite-index-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+        .scale-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+        .scale-btn{padding:5px 12px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);cursor:pointer;font-size:12px}
+        .scale-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+        .dim-badge{font-size:11px;font-family:var(--font-mono);background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:3px 8px;color:var(--color-text-secondary)}
+        .note{font-size:11px;color:var(--color-text-tertiary);margin-top:6px}
+        select{width:100%;padding:8px 10px;border-radius:12px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);font-size:13px}
+    </style>
+</head>
+<body>
+<div class="glass-panel">
+<div class="panel">
+    <div class="controls">
+        <div class="ctrl-group">
+            <div class="lbl">Background color</div>
+            <div class="ctrl-row">
+                <input type="color" id="bgColor" value="#1a1a2e">
+                <span id="bgHex" style="font-family:var(--font-mono)">#1a1a2e</span>
+            </div>
+            <div class="swatch-row" id="bgSwatches"></div>
+        </div>
+        <div class="ctrl-group">
+            <div class="lbl">Number color</div>
+            <div class="ctrl-row">
+                <input type="color" id="numColor" value="#ffffff">
+                <span id="numHex" style="font-family:var(--font-mono)">#ffffff</span>
+            </div>
+            <div class="swatch-row" id="numSwatches"></div>
+        </div>
+        <div class="ctrl-group">
+            <div class="lbl">Crease — splits symmetrically at each cell boundary</div>
+            <div class="ctrl-row">
+                <span>Color</span>
+                <div style="display:flex;gap:8px"><input type="color" id="creaseColor" value="#ffffff"><span id="creaseHex">#ffffff</span></div>
+            </div>
+            <div class="ctrl-row"><span>Thickness</span><input type="range" id="creaseW" min="2" max="20" value="6" step="2"><span id="creaseWOut">6</span>px</div>
+            <div class="ctrl-row"><span>Opacity</span><input type="range" id="creaseOpacity" min="5" max="100" value="60" step="5"><span id="creaseOpacityOut">60</span>%</div>
+            <div class="lbl">Style</div>
+            <select id="creaseStyle">
+                <option value="solid">Solid</option><option value="dashed">Dashed</option><option value="dotted">Dotted</option>
+                <option value="groove">Double groove</option><option value="shadow">Shadow fold</option>
+            </select>
+        </div>
+        <div class="ctrl-group"><div class="lbl">Font</div><div class="font-grid" id="fontGrid"></div></div>
+        <div class="ctrl-group">
+            <div class="lbl">Font size</div><div class="ctrl-row"><input type="range" id="fontSize" min="20" max="90" value="60" step="1"><span id="fontSizeOut">60</span></div>
+            <div class="lbl">Font weight</div><div class="ctrl-row"><input type="range" id="fontWeight" min="100" max="900" value="700" step="100"><span id="fontWeightOut">700</span></div>
+        </div>
+        <div class="ctrl-group">
+            <div class="lbl">PNG export scale</div><div class="scale-row" id="scaleRow"></div>
+            <div class="note" id="pngDimNote">Output: 100 × 1000 px</div>
+        </div>
+        <div class="ctrl-group"><div class="lbl">Highlight sprite</div><div class="sprite-row" id="spriteIndexBtns"></div></div>
+        <div class="dl-row"><button class="dl-btn" onclick="downloadSVG()">SVG ↓</button><button class="dl-btn png" onclick="downloadPNG()">PNG ↓</button></div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:4px"><span class="dim-badge">100×1000px</span><span class="dim-badge">10 sprites</span><span class="dim-badge">0…9</span></div>
+    </div>
+    <div class="preview-wrap">
+        <div style="font-size:12px;color:#aaa">Preview (50%)</div>
+        <div style="border:0.5px solid rgba(255,255,255,0.2);border-radius:12px;overflow:hidden;width:50px"><svg id="spriteSVG" viewBox="0 0 100 1000" width="50" height="500"></svg></div>
+        <div style="font-size:11px;color:#888">50×500px preview</div>
+    </div>
+</div>
+</div>
+<canvas id="exportCanvas" style="display:none"></canvas>
+<script>
+    // DIGITS START FROM 0 (top) to 9 (bottom)
+    const DIGITS = ['0','1','2','3','4','5','6','7','8','9'];
+    const CELL = 100;
+    const BG_PRESETS  = ['#1a1a2e','#0f3460','#16213e','#2d2d44','#f5f5f0','#ffffff','#fdf6e3','#1e1e1e','#2c3e50','#e8f4f8'];
+    const NUM_PRESETS = ['#ffffff','#f0c040','#ff6b6b','#4ecdc4','#96e6a1','#a29bfe','#fd79a8','#e17055','#74b9ff','#000000'];
+    const FONTS = [
+        {label:'System',stack:'system-ui,sans-serif'},{label:'Serif',stack:'Georgia,serif'},{label:'Mono',stack:'"Courier New",monospace'},
+        {label:'Impact',stack:'Impact,fantasy'},{label:'Arial',stack:'Arial,sans-serif'},{label:'Verdana',stack:'Verdana,sans-serif'},
+        {label:'Cursive',stack:'cursive'},{label:'Fantasy',stack:'fantasy'}
+    ];
+    const SCALES = [1,2,4,8];
+    let activeFont = FONTS[0].stack;
+    let activeSpriteIdx = -1;
+    let pngScale = 1;
+
+    function buildSwatches(containerId, presets, inputId) {
+        const cont = document.getElementById(containerId);
+        if(!cont) return;
+        presets.forEach(hex => {
+            const sw = document.createElement('div');
+            sw.className = 'swatch';
+            sw.style.background = hex;
+            sw.onclick = () => {
+                document.getElementById(inputId).value = hex;
+                updateHex(inputId);
+                render();
+            };
+            cont.appendChild(sw);
+        });
+    }
+
+    function updateHex(id) {
+        const map = {bgColor:'bgHex', numColor:'numHex', creaseColor:'creaseHex'};
+        if(map[id]) document.getElementById(map[id]).textContent = document.getElementById(id).value;
+    }
+
+    function buildFontGrid() {
+        const g = document.getElementById('fontGrid');
+        if(!g) return;
+        FONTS.forEach((f,i) => {
+            const btn = document.createElement('div');
+            btn.className = 'font-btn' + (i===0 ? ' active' : '');
+            btn.style.fontFamily = f.stack;
+            btn.textContent = f.label;
+            btn.onclick = () => {
+                activeFont = f.stack;
+                document.querySelectorAll('.font-btn').forEach(x=>x.classList.remove('active'));
+                btn.classList.add('active');
+                render();
+            };
+            g.appendChild(btn);
+        });
+    }
+
+    function buildSpriteButtons() {
+        const c = document.getElementById('spriteIndexBtns');
+        if(!c) return;
+        DIGITS.forEach((d,i) => {
+            const b = document.createElement('div');
+            b.className = 'sprite-index-btn';
+            b.textContent = d;
+            b.dataset.idx = i;
+            b.onclick = () => {
+                activeSpriteIdx = activeSpriteIdx === i ? -1 : i;
+                document.querySelectorAll('.sprite-index-btn').forEach(x=>x.classList.toggle('active', +x.dataset.idx===activeSpriteIdx));
+                render();
+            };
+            c.appendChild(b);
+        });
+    }
+
+    function buildScaleButtons() {
+        const r = document.getElementById('scaleRow');
+        if(!r) return;
+        SCALES.forEach(s => {
+            const b = document.createElement('div');
+            b.className = 'scale-btn' + (s===1 ? ' active' : '');
+            b.textContent = s+'×';
+            b.dataset.scale = s;
+            b.onclick = () => {
+                pngScale = s;
+                document.querySelectorAll('.scale-btn').forEach(x=>x.classList.toggle('active', +x.dataset.scale===s));
+                document.getElementById('pngDimNote').textContent = `Output: ${100*s} × ${1000*s} px`;
+            };
+            r.appendChild(b);
+        });
+    }
+
+    function lightenH(hex) {
+        let r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+        return '#'+[Math.min(255,r+40),Math.min(255,g+40),Math.min(255,b+40)].map(x=>x.toString(16).padStart(2,'0')).join('');
+    }
+
+    function buildSVGContent(forExport) {
+        const bg = document.getElementById('bgColor').value;
+        const nc = document.getElementById('numColor').value;
+        const cc = document.getElementById('creaseColor').value;
+        const fs = +document.getElementById('fontSize').value;
+        const fw = document.getElementById('fontWeight').value;
+        const cw = +document.getElementById('creaseW').value;
+        const co = +document.getElementById('creaseOpacity').value;
+        const cs = document.getElementById('creaseStyle').value;
+        const op = (co/100).toFixed(3);
+        const half = cw/2;
+        let out = '<defs>';
+        DIGITS.forEach((_,i) => { out += `<clipPath id="cp${i}"><rect x="0" y="${i*CELL}" width="100" height="${CELL}"/></clipPath>`; });
+        out += '</defs>';
+        DIGITS.forEach((_,i) => {
+            const cy = i*CELL;
+            const isActive = (!forExport && activeSpriteIdx === i);
+            out += `<rect x="0" y="${cy}" width="100" height="${CELL}" fill="${isActive ? lightenH(bg) : bg}"/>`;
+        });
+        DIGITS.forEach((d,i) => {
+            const cy = i*CELL;
+            const ty = cy + CELL/2 + fs*0.36;
+            out += `<text x="50" y="${ty.toFixed(2)}" text-anchor="middle" font-family="${activeFont}" font-size="${fs}" font-weight="${fw}" fill="${nc}">${d}</text>`;
+        });
+        for(let i=1;i<10;i++) {
+            const boundary = i*CELL;
+            const h = half;
+            if(cs==='solid') {
+                out += `<rect x="0" y="${boundary-h}" width="100" height="${h}" fill="${cc}" opacity="${op}" clip-path="url(#cp${i-1})"/>`;
+                out += `<rect x="0" y="${boundary}" width="100" height="${h}" fill="${cc}" opacity="${op}" clip-path="url(#cp${i})"/>`;
+            } else if(cs==='dashed') {
+                out += `<line x1="0" y1="${boundary}" x2="100" y2="${boundary}" stroke="${cc}" stroke-width="${cw}" stroke-opacity="${op}" stroke-dasharray="10 5"/>`;
+            } else if(cs==='dotted') {
+                out += `<line x1="0" y1="${boundary}" x2="100" y2="${boundary}" stroke="${cc}" stroke-width="${cw}" stroke-opacity="${op}" stroke-dasharray="4 4" stroke-linecap="round"/>`;
+            } else if(cs==='groove') {
+                const q = h/2;
+                out += `<rect x="0" y="${boundary-h}" width="100" height="${q}" fill="${cc}" opacity="${(co/100*0.8).toFixed(2)}" clip-path="url(#cp${i-1})"/>`;
+                out += `<rect x="0" y="${boundary-q}" width="100" height="${q}" fill="${cc}" opacity="${(co/100*0.4).toFixed(2)}" clip-path="url(#cp${i-1})"/>`;
+                out += `<rect x="0" y="${boundary}" width="100" height="${q}" fill="${cc}" opacity="${(co/100*0.4).toFixed(2)}" clip-path="url(#cp${i})"/>`;
+                out += `<rect x="0" y="${boundary+q}" width="100" height="${q}" fill="${cc}" opacity="${(co/100*0.8).toFixed(2)}" clip-path="url(#cp${i})"/>`;
+            } else if(cs==='shadow') {
+                const steps=4;
+                for(let s=0;s<steps;s++){
+                    const sh = h/steps;
+                    const frac = (steps-s)/steps;
+                    const sop = (co/100 * frac * 0.5).toFixed(3);
+                    out += `<rect x="0" y="${(boundary-(s+1)*sh).toFixed(2)}" width="100" height="${sh.toFixed(2)}" fill="${cc}" opacity="${sop}" clip-path="url(#cp${i-1})"/>`;
+                    out += `<rect x="0" y="${(boundary+s*sh).toFixed(2)}" width="100" height="${sh.toFixed(2)}" fill="${cc}" opacity="${sop}" clip-path="url(#cp${i})"/>`;
+                }
+                out += `<line x1="0" y1="${boundary}" x2="100" y2="${boundary}" stroke="${cc}" stroke-width="1" stroke-opacity="${op}"/>`;
+            }
+        }
+        if(!forExport && activeSpriteIdx >=0) {
+            const cy = activeSpriteIdx*CELL;
+            out += `<rect x="1" y="${cy+1}" width="98" height="${CELL-2}" fill="none" stroke="${nc}" stroke-width="1.5" stroke-dasharray="4 2"/>`;
+        }
+        return out;
+    }
+
+    function render() {
+        const svgElem = document.getElementById('spriteSVG');
+        if(svgElem) svgElem.innerHTML = buildSVGContent(false);
+    }
+
+    function getSVGString() {
+        return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 1000" width="100" height="1000">\n${buildSVGContent(true)}\n</svg>`;
+    }
+
+    function downloadSVG() {
+        const blob = new Blob([getSVGString()], {type:'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download='sprites_0_9.svg'; a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function downloadPNG() {
+        const scale = pngScale;
+        const W = 100*scale, H = 1000*scale;
+        const svgStr = `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 1000" width="${W}" height="${H}">${buildSVGContent(true)}</svg>`;
+        const blob = new Blob([svgStr], {type:'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.getElementById('exportCanvas');
+            canvas.width = W; canvas.height = H;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0,0,W,H);
+            ctx.drawImage(img,0,0,W,H);
+            URL.revokeObjectURL(url);
+            canvas.toBlob(pngBlob => {
+                const pngUrl = URL.createObjectURL(pngBlob);
+                const a = document.createElement('a'); a.href=pngUrl; a.download=`sprites_0_9_${scale}x.png`; a.click();
+                URL.revokeObjectURL(pngUrl);
+            },'image/png');
+        };
+        img.src = url;
+    }
+
+    // event binding
+    ['bgColor','numColor','creaseColor'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.addEventListener('input', () => { updateHex(id); render(); });
+    });
+    ['fontSize','fontWeight','creaseW','creaseOpacity'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.addEventListener('input', () => {
+            const out = document.getElementById(id+'Out');
+            if(out) out.textContent = el.value;
+            render();
+        });
+    });
+    const styleSelect = document.getElementById('creaseStyle');
+    if(styleSelect) styleSelect.addEventListener('change', render);
+
+    // build UI
+    buildSwatches('bgSwatches', BG_PRESETS, 'bgColor');
+    buildSwatches('numSwatches', NUM_PRESETS, 'numColor');
+    buildFontGrid();
+    buildSpriteButtons();
+    buildScaleButtons();
+    render();
+</script>
+</body>
+</html>
