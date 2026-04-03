@@ -43,6 +43,39 @@
   outline: none;
 }
 
+/* ── Resizable elements ── */
+.resizable-active {
+  outline: 2px dashed rgba(247,185,60,0.6);
+  outline-offset: 6px;
+}
+
+.resize-handle {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #f7b93c;
+  border-radius: 50%;
+  cursor: nwse-resize;
+  z-index: 9999;
+  bottom: -8px;
+  right: -8px;
+}
+
+.resize-handle-w {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #44aaff;
+  border-radius: 50%;
+  cursor: ew-resize;
+  z-index: 9999;
+  bottom: -8px;
+  right: 14px; 
+}
+
+#header, #showtime {
+  position: relative;
+}
 
 /* ── Body ── */
 body {
@@ -374,8 +407,8 @@ background: linear-gradient(298deg, rgba(154, 18, 20, 1) 6%, rgba(171, 50, 39, 1
   position: relative;
   text-align: center;
   color: #F5DB79;
-  max-width: 70%;
-  white-space: nowrap;
+  max-width: 100%; 
+  white-space: normal;
   overflow: hidden;
   width: fit-content;
   margin-left: auto;
